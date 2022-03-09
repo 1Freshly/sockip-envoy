@@ -1,0 +1,36 @@
+admin:
+  access_log_path: /dev/null
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 0
+static_resources:
+  listeners:
+    name: listener_0
+    address:
+      socket_address:
+        address: 127.0.0.1
+        port_value: 9092
+    listener_filters:
+    - name: "sockip"
+      typed_config:
+    filter_chains:
+    - filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: edge
+          http_filters:
+          - name: envoy.filters.http.router
+          route_config:
+            virtual_hosts:
+            - name: direct_response_service
+              domains: ["*"]
+              routes:
+              - match:
+                  prefix: "/"
+                direct_response:
+                  status: 200
+                  body:
+                    inline_string: "Hello"
+
