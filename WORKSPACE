@@ -1,4 +1,4 @@
-workspace(name = "envoy_filter_example")
+workspace(name = "sockip")
 
 local_repository(
     name = "envoy",
